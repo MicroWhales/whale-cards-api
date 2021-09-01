@@ -15,11 +15,15 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-	if port == "" {
-		port = "5000"
-	}
+	var address string = ""
 
-	router.Run("localhost:" + port)
+	if port == "" {
+		// if port environmental variable isn't specified
+		address = "127.0.0.1:5000"
+	} else {
+		address = "0.0.0.0:5000"
+	}
+	router.Run(address)
 }
 
 func getAlbums(c *gin.Context) {
