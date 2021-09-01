@@ -2,19 +2,17 @@ package main
 
 import (
 	"net/http"
-	"fmt"
-	"github.com/gin-gonic/gin"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	fmt.Println("Hello Wolrd")
-
-	router :=  gin.Default()
+	router := gin.Default()
 	router.GET("/", getAlbums)
-
+	loadDBConfig()
 	port := os.Getenv("PORT")
-
+	// db := os.Getenv("DB_USERNAME")
 	var address string = ""
 
 	if port == "" {
@@ -23,6 +21,7 @@ func main() {
 	} else {
 		address = "0.0.0.0:5000"
 	}
+
 	router.Run(address)
 }
 
@@ -39,6 +38,6 @@ func getAlbums(c *gin.Context) {
 		{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
 		{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
 	}
-	
-    c.IndentedJSON(http.StatusOK, albums)
+
+	c.IndentedJSON(http.StatusOK, albums)
 }
