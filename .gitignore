@@ -39,4 +39,4 @@ bundles/
 vendor/pkg/
 pyenv
 Vagrantfile
-.yaml
+*.yaml
