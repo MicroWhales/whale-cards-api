@@ -1,20 +1,29 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 func main() {
 	router := gin.Default()
 	router.GET("/", getAlbums)
-	loadDBConfig()
-	port := os.Getenv("PORT")
-	// db := os.Getenv("DB_USERNAME")
-	var address string = ""
 
+	db, err := sql.Open("postgres", loadDBConfig())
+	if err != nil {
+		fmt.Println("Failed to open a DB connection: ", err)
+	}
+	dbHealthCheck(db)
+	defer db.Close()
+
+	port := os.Getenv("PORT")
+
+	var address string = ""
 	if port == "" {
 		// if port environmental variable isn't specified
 		address = "127.0.0.1:5000"
@@ -40,4 +49,18 @@ func getAlbums(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, albums)
+}
+
+func dbHealthCheck(db *sql.DB) {
+	var response string
+	healthCheckSQL := "SELECT * FROM health_check"
+	row := db.QueryRow(healthCheckSQL)
+	switch err := row.Scan(&response); err {
+	case sql.ErrNoRows:
+		fmt.Println("No rows were returned!")
+	case nil:
+		fmt.Println(response)
+	default:
+		panic(err)
+	}
 }
