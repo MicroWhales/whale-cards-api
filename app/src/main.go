@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"os"
 )
 
 func main() {
@@ -11,7 +12,18 @@ func main() {
 
 	router :=  gin.Default()
 	router.GET("/", getAlbums)
-	router.Run("localhost:8080")
+
+	port := os.Getenv("PORT")
+
+	var address string = ""
+
+	if port == "" {
+		// if port environmental variable isn't specified
+		address = "127.0.0.1:5000"
+	} else {
+		address = "0.0.0.0:5000"
+	}
+	router.Run(address)
 }
 
 func getAlbums(c *gin.Context) {
