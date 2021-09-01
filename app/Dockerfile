@@ -2,11 +2,10 @@
 FROM golang:latest
 
 # Set Working DIR
-WORKDIR /app
-
+WORKDIR /
 
 # Copy GO modules and expected hashes file
-COPY app/. .
+COPY . .
 
 # # Install dependencies
 RUN go mod download
