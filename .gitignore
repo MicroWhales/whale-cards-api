@@ -40,3 +40,6 @@ vendor/pkg/
 pyenv
 Vagrantfile
 ./app/config/db.yaml
+./app/config/db.yml
+*.yml
+*.yaml
