@@ -10,17 +10,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var db, err = sql.Open("postgres", loadDBConfig())
+
 func main() {
 	router := gin.Default()
 	router.GET("/", getAlbums)
 
-	db, err := sql.Open("postgres", loadDBConfig())
-	if err != nil {
-		fmt.Println("Failed to open a DB connection: ", err)
-	}
-	dbHealthCheck(db)
-	defer db.Close()
-
+	router.GET("/db/healthcheck", dbHealthCheck)
 	port := os.Getenv("PORT")
 
 	var address string = ""
@@ -51,7 +47,7 @@ func getAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, albums)
 }
 
-func dbHealthCheck(db *sql.DB) {
+func dbHealthCheck(c *gin.Context) {
 	var response string
 	healthCheckSQL := "SELECT * FROM health_check"
 	row := db.QueryRow(healthCheckSQL)
@@ -63,4 +59,5 @@ func dbHealthCheck(db *sql.DB) {
 	default:
 		panic(err)
 	}
+	c.IndentedJSON(http.StatusOK, response)
 }

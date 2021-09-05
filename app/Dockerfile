@@ -15,8 +15,8 @@ RUN go mod download
 # # Expose port 5000 
 ENV PORT 5000
 
-# # Build
-RUN go build src/main.go
+# Build
+RUN go build -o main src/*.go
 
 ENTRYPOINT [ "./main" ]
 

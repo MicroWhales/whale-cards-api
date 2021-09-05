@@ -32,5 +32,13 @@ func loadDBConfig() (DB_CONNECTION_STRING string) {
 	// fmt.Println("DB_USERNAME :", DB_USERNAME)
 	// fmt.Println("DB_PASSWORD :", DB_PASSWORD)
 	// fmt.Println("DB_CONNECTION_STRING :", DB_CONNECTION_STRING)
+
+	// Docker connection string
+	// url := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable",
+	//     pql.conf.Postgres.User,
+	//     pql.conf.Postgres.Password,
+	//     pql.conf.Postgres.Host,
+	//     pql.conf.Postgres.Port,
+	//     pql.conf.Postgres.DB)
 	return
 }
